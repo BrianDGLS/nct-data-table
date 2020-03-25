@@ -1,5 +1,5 @@
 import React from 'react'
-import './App.css'
+import './App.scss'
 import { NCTDataService, PassFailRate } from './NCTDataService'
 import { VehicleReport } from './VehicleReport'
 
