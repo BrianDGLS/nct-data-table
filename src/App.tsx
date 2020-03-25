@@ -42,44 +42,75 @@ class App extends React.Component {
 
   render() {
     const { passFailRateByMake, minimumVehiclesTested, minimumVehicleYear } = this.state
+    const yearRange = [...new Array(20)].map((_, i) => 2012 - i)
     const passFailRateDescending = passFailRateByMake.sort((a, b) => {
       return a.passRate < b.passRate ? 1 : -1
     })
     return (
       <div className="App">
-        <label htmlFor="minimumVehicleYear">Minimum Vehicle Year</label>
-        <input
-          id="minimumVehicleYear"
-          type="number"
-          value={minimumVehicleYear}
-          onChange={e => {
-            this.setState({
-              minimumVehicleYear: e.target.value
-            })
-            this.setNCTData()
-          }}
-        />
-        <label htmlFor="minimumVehiclesTested">Minimum Vehicles Tested</label>
-        <input
-          id="minimumVehiclesTested"
-          type="number"
-          value={minimumVehiclesTested}
-          min="0"
-          max="10000"
-          onChange={e => {
-            this.setState({
-              minimumVehiclesTested: e.target.value
-            })
-            this.setNCTData()
-          }}
-        />
-        <ul>
-          {passFailRateDescending.map(({ make, passRate }, i) => (
-            <li key={i}>
-              {i + 1}: {make} - Pass Rate {passRate}%
-            </li>
-          ))}
-        </ul>
+        <div className="row">
+          <div className="col">
+            <form>
+              <div className="form-group">
+                <label htmlFor="minimumVehicleYear">Minimum Vehicle Year</label>
+                <select
+                  id="minimumVehicleYear"
+                  className="form-control"
+                  value={minimumVehicleYear}
+                  onChange={e => {
+                    this.setState({
+                      minimumVehicleYear: e.target.value
+                    })
+                    this.setNCTData()
+                  }}
+                >
+                  {yearRange.map(year => (
+                    <option value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="minimumVehiclesTested">Minimum Vehicles Tested</label>
+                <select
+                  id="minimumVehiclesTested"
+                  className="form-control"
+                  value={minimumVehiclesTested}
+                  onChange={e => {
+                    this.setState({
+                      minimumVehiclesTested: e.target.value
+                    })
+                    this.setNCTData()
+                  }}
+                >
+                  <option value="5000">5000</option>
+                  <option value="2500">2500</option>
+                  <option value="1000">1000</option>
+                  <option value="500">500</option>
+                  <option value="1">1</option>
+                </select>
+              </div>
+            </form>
+            <table className="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Pos.</th>
+                  <th scope="col">Brand</th>
+                  <th scope="col">Pass Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {passFailRateDescending.map(({ make, passRate }, i) => (
+                  <tr key={i}>
+                    <th scope="row">{i + 1}</th>
+                    <td>{make}</td>
+                    <td>{passRate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="col"></div>
+        </div>
       </div>
     )
   }
