@@ -11,9 +11,7 @@ class App extends React.Component {
     modernVehicles: [] as VehicleReport[],
     popularVehicles: [] as VehicleReport[],
     popularMakes: [] as string[],
-    passFailRateByMake: [] as PassFailRate[],
-    minimumVehicleYear: nctDataService.options.minimumVehicleYear,
-    minimumVehiclesTested: nctDataService.options.minimumVehiclesTested
+    passFailRateByMake: [] as PassFailRate[]
   }
 
   componentWillMount() {
@@ -25,8 +23,6 @@ class App extends React.Component {
   }
 
   setNCTData() {
-    nctDataService.options.minimumVehicleYear = this.state.minimumVehicleYear
-    nctDataService.options.minimumVehiclesTested = this.state.minimumVehiclesTested
     const modernVehicles = nctDataService.getAllModernVehicleReports(this.state.allVehicles)
     const popularVehicles = nctDataService.getAllPopularVehicleReports(modernVehicles)
     const popularMakes = nctDataService.getPopularMakes(popularVehicles)
@@ -41,7 +37,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { passFailRateByMake, minimumVehiclesTested, minimumVehicleYear } = this.state
+    const { passFailRateByMake } = this.state
+    const {
+      options: { minimumVehiclesTested, minimumVehicleYear }
+    } = nctDataService
     const yearRange = [...new Array(20)].map((_, i) => 2012 - i)
     const passFailRateDescending = passFailRateByMake.sort((a, b) => {
       return a.passRate < b.passRate ? 1 : -1
@@ -58,9 +57,7 @@ class App extends React.Component {
                   className="form-control"
                   value={minimumVehicleYear}
                   onChange={e => {
-                    this.setState({
-                      minimumVehicleYear: e.target.value
-                    })
+                    nctDataService.options.minimumVehicleYear = parseInt(e.target.value)
                     this.setNCTData()
                   }}
                 >
@@ -76,9 +73,7 @@ class App extends React.Component {
                   className="form-control"
                   value={minimumVehiclesTested}
                   onChange={e => {
-                    this.setState({
-                      minimumVehiclesTested: e.target.value
-                    })
+                    nctDataService.options.minimumVehiclesTested = parseInt(e.target.value)
                     this.setNCTData()
                   }}
                 >
